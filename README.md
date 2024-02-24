@@ -7,7 +7,7 @@ The file is a text file which contains a series of integers separated by commas.
 
 The first integer gives the number of caverns - N.
 
-The next N*2 integers give the coordinates of each of the caverns � each value is non-negative.
+The next N*2 integers give the coordinates of each of the caverns, each value is non-negative.
 
 The final N*N integers give the connectivity of the tunnels. 1 means connected, 0 means not
 connected. Remember that some tunnels are one-way.
