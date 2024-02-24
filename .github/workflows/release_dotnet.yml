@@ -8,21 +8,17 @@ on:
     types: [created]
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x' # SDK Version to use.
-          source-url: https://nuget.pkg.github.com/gjemiolo-git/index.json
-        env:
-          NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-      - run: dotnet build --configuration Release PathFinder
-      - name: Create the package
-        run: dotnet pack --configuration Release PathFinder
-      - name: Publish the package to GPR
-        run: dotnet nuget push PathFinder/bin/Release/*.nupkg
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Set VERSION variable from tag
+      run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
+    - name: Pack
+      run: dotnet pack --configuration Release /p:Version=${VERSION} --output .
+    - name: Push
+      run: dotnet nuget push NuGet.Workflow.${VERSION}.nupkg --source https://nuget.pkg.github.com/acraven/index.json --api-key ${GITHUB_TOKEN}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
