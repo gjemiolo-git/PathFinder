@@ -23,7 +23,6 @@ jobs:
           NUGET_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
       - name: Set VERSION variable from tag
       - run: echo "VERSION=${GITHUB_REF/refs\/tags\/v/}" >> $GITHUB_ENV
-      - run: dotnet build --configuration Release PathFinder
       - name: Create the package
         run: dotnet pack --configuration Release /p:Version=${VERSION} PathFinder
       - name: Publish the package to GPR
